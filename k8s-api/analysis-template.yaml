@@ -6,10 +6,10 @@ metadata:
 spec:
   metrics:
     - name: success-rate
-      interval: 30s
-      count: 3
+      interval: 15s
+      count: 1
       successCondition: result[0] >= 0.95
-      failureLimit: 1
+      failureLimit: 0
       provider:
         prometheus:
           address: http://kube-prometheus-stack-prometheus.monitoring.svc:9090
