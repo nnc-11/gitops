@@ -1,0 +1,53 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: api-slo
+  namespace: demo
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: api-slo.rules
+      rules:
+        - alert: ApiSuccessRateLow
+          expr: |
+            (
+              sum(rate(flask_http_request_total{namespace="demo",status!~"5.."}[1m]))
+              /
+              sum(rate(flask_http_request_total{namespace="demo"}[1m]))
+            ) < 0.95
+          for: 1m
+          labels:
+            severity: critical
+            service: api
+          annotations:
+            summary: "API success rate below 95%"
+            description: "API success rate in namespace demo has been below the SLO threshold for 1 minute."
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: api-email-alerts
+  namespace: demo
+  labels:
+    alertmanagerConfig: api
+spec:
+  route:
+    receiver: email-personal
+    groupBy:
+      - alertname
+      - service
+    groupWait: 10s
+    groupInterval: 30s
+    repeatInterval: 1h
+    matchers:
+      - name: service
+        value: api
+  receivers:
+    - name: email-personal
+      emailConfigs:
+        - to: tranduc.357cc@gmail.com
+          from: tranduc.357cc@gmail.com
+          smarthost: smtp.gmail.com:587
+          authUsername: tranduc.357cc@gmail.com
+          sendResolved: true
