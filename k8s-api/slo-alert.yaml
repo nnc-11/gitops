@@ -18,6 +18,7 @@ spec:
             ) < 0.95
           for: 1m
           labels:
+            namespace: demo
             severity: critical
             service: api
           annotations:
