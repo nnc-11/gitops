@@ -50,4 +50,7 @@ spec:
           from: tranduc.357cc@gmail.com
           smarthost: smtp.gmail.com:587
           authUsername: tranduc.357cc@gmail.com
+          authPassword:
+            name: gmail-smtp
+            key: password
           sendResolved: true
