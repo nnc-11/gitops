@@ -25,13 +25,13 @@ spec:
     spec:
       containers:
         - name: api
-          image: w9-api:4
+          image: w9-api:3
           imagePullPolicy: Never
           ports:
             - containerPort: 5000
           env:
             - name: VERSION
-              value: "v4"
+              value: "v3"
 ---
 apiVersion: v1
 kind: Service
